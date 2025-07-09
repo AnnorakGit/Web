@@ -19,6 +19,18 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
+    // --- Format the date for human-readable output ---
+    const formattedDateTime = new Date(dateTime).toLocaleString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    });
+
+
     // --- 1. Read HTML templates ---
     const newBookingTemplatePath = path.join(process.cwd(), 'out', 'NewBookingEmail.html');
     const confirmationTemplatePath = path.join(process.cwd(), 'out', 'BookingConfirmationEmail.html');
@@ -30,11 +42,11 @@ export default async function handler(req, res) {
     const personalizedNewBookingEmail = newBookingTemplate
       .replace(/{{name}}/g, name)
       .replace(/{{email}}/g, email)
-      .replace(/{{dateTime}}/g, dateTime);
+      .replace(/{{dateTime}}/g, formattedDateTime);
 
     const personalizedConfirmationEmail = confirmationTemplate
       .replace(/{{name}}/g, name)
-      .replace(/{{dateTime}}/g, dateTime);
+      .replace(/{{dateTime}}/g, formattedDateTime);
 
 
     // --- 3. Send emails with HTML content ---
