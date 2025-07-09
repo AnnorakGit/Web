@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
-import { NewBookingEmail } from '../emails/NewBookingEmail.js';
-import { BookingConfirmationEmail } from '../emails/BookingConfirmationEmail.js';
+import path from 'path';
+import fs from 'fs/promises';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const toEmail = process.env.TO_EMAIL;
@@ -19,12 +19,32 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
+    // --- 1. Read HTML templates ---
+    const newBookingTemplatePath = path.join(process.cwd(), 'out', 'NewBookingEmail.html');
+    const confirmationTemplatePath = path.join(process.cwd(), 'out', 'BookingConfirmationEmail.html');
+
+    const newBookingTemplate = await fs.readFile(newBookingTemplatePath, 'utf-8');
+    const confirmationTemplate = await fs.readFile(confirmationTemplatePath, 'utf-8');
+
+    // --- 2. Personalize templates ---
+    const personalizedNewBookingEmail = newBookingTemplate
+      .replace(/{{name}}/g, name)
+      .replace(/{{email}}/g, email)
+      .replace(/{{dateTime}}/g, dateTime);
+
+    const personalizedConfirmationEmail = confirmationTemplate
+      .replace(/{{name}}/g, name)
+      .replace(/{{dateTime}}/g, dateTime);
+
+
+    // --- 3. Send emails with HTML content ---
+    
     // Email to Annorak (Internal Notification)
     await resend.emails.send({
       from: fromEmail,
       to: [toEmail],
       subject: `New Booking from ${name}`,
-      react: NewBookingEmail({ name, email, dateTime }),
+      html: personalizedNewBookingEmail,
     });
 
     // Email to the Client (Confirmation)
@@ -32,7 +52,7 @@ export default async function handler(req, res) {
       from: fromEmail,
       to: [email],
       subject: 'Your Meeting with Annorak is Confirmed',
-      react: BookingConfirmationEmail({ name, dateTime }),
+      html: personalizedConfirmationEmail,
     });
 
     return res.status(200).json({ message: 'Emails sent successfully!' });
