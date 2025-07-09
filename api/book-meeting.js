@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
-import { NewBookingEmail } from '../../src/components/emails/NewBookingEmail.jsx';
-import { BookingConfirmationEmail } from '../../src/components/emails/BookingConfirmationEmail.jsx';
+import { NewBookingEmail } from '../src/components/emails/NewBookingEmail.jsx';
+import { BookingConfirmationEmail } from '../src/components/emails/BookingConfirmationEmail.jsx';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const toEmail = process.env.TO_EMAIL;
