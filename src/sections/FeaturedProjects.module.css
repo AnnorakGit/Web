@@ -1,25 +1,77 @@
 .projects {
-  padding: 6rem 64px;
-  background-color: transparent;
+  padding: 100px 5%;
 }
 
 .title {
+  font-family: 'Satoshi-Bold', sans-serif;
+  font-size: 3rem;
+  color: #EFEFEF;
   text-align: center;
-  font-size: 34px;
-  font-weight: 700;
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 2rem;
-  max-width: 1280px;
+.carouselContainer {
+  max-width: 1600px;
   margin: 0 auto;
 }
 
+.slide {
+  padding: 0 15px;
+}
+
+/* Custom Slick Slider Styles */
+.carouselContainer :global(.slick-slider) {
+  margin: 0 -15px;
+}
+
+.carouselContainer :global(.slick-dots) {
+  bottom: -50px;
+}
+
+.carouselContainer :global(.slick-dots li button:before) {
+  font-size: 12px;
+  color: #555;
+  opacity: 1;
+  transition: color 0.3s ease;
+}
+
+.carouselContainer :global(.slick-dots li.slick-active button:before) {
+  color: #EFEFEF;
+}
+
+.carouselContainer :global(.slick-prev),
+.carouselContainer :global(.slick-next) {
+  width: 50px;
+  height: 50px;
+  z-index: 10;
+}
+
+.carouselContainer :global(.slick-prev:before),
+.carouselContainer :global(.slick-next:before) {
+  font-family: 'slick';
+  font-size: 50px;
+  color: #EFEFEF;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.carouselContainer :global(.slick-prev:hover:before),
+.carouselContainer :global(.slick-next:hover:before) {
+  opacity: 1;
+}
+
+.carouselContainer :global(.slick-prev) {
+  left: -60px;
+}
+
+.carouselContainer :global(.slick-next) {
+  right: -60px;
+}
+
+/* Hide arrows on smaller screens where they would overlap */
 @media (max-width: 768px) {
-  .projects {
-    padding: 4rem 24px;
+  .carouselContainer :global(.slick-prev),
+  .carouselContainer :global(.slick-next) {
+    display: none !important;
   }
 } 

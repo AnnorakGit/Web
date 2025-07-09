@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import styles from './ServiceCard.module.css';
 
-const ServiceCard = ({ title, description, index, icon: Icon }) => {
+const ServiceCard = ({ title, description, index, icon: Icon, imageSrc }) => {
   return (
     <motion.div
       className={styles.card}
@@ -11,11 +11,14 @@ const ServiceCard = ({ title, description, index, icon: Icon }) => {
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
     >
-      <div className={styles.iconWrapper}>
-        {Icon && <Icon />}
+      <img src={imageSrc} alt="" className={styles.backgroundImage} />
+      <div className={styles.content}>
+        <div className={styles.iconWrapper}>
+          {Icon && <Icon />}
+        </div>
+        <h3 className={styles.title}>{title}</h3>
+        <p className={styles.description}>{description}</p>
       </div>
-      <h3 className={styles.title}>{title}</h3>
-      <p className={styles.description}>{description}</p>
     </motion.div>
   );
 };

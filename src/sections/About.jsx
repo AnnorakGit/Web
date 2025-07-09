@@ -1,12 +1,20 @@
 import React from 'react';
 import styles from './About.module.css';
+import aboutVideo from '../assets/videos/AnnorakIntelligendeGroup.mp4';
 
 const About = () => {
   return (
     <section className={styles.about} id="about">
       <div className={styles.container}>
-        <div className={styles.mediaPlaceholder}>
-          {/* Placeholder for corporate video/image */}
+        <div className={styles.mediaContainer}>
+          <video
+            src={aboutVideo}
+            className={styles.video}
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
         </div>
         <div className={styles.content}>
           <div>
@@ -18,11 +26,11 @@ const About = () => {
           <div className={styles.values}>
             <div>
               <h3>Vision</h3>
-              <p>To be the leading partner for businesses seeking to innovate and thrive in the digital age.</p>
+              <p>To architect the future of business intelligence, turning data into market leadership.</p>
             </div>
             <div>
               <h3>Mission</h3>
-              <p>To craft superior software solutions that drive efficiency, growth, and a competitive edge.</p>
+              <p>To deliver elite software and data strategies that provide a definitive competitive edge.</p>
             </div>
           </div>
         </div>

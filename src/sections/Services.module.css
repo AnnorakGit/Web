@@ -4,10 +4,11 @@
 }
 
 .title {
+  font-family: 'Satoshi-Bold', sans-serif;
+  font-size: 3rem;
+  color: #EFEFEF;
   text-align: center;
-  font-size: 34px;
-  font-weight: 700;
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
 }
 
 .grid {

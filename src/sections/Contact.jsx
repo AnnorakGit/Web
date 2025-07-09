@@ -47,7 +47,7 @@ const Contact = () => {
   return (
     <section className={styles.contact} id="contact">
       <div className={styles.container}>
-        <h2 className={styles.title}>Let’s Create Something Amazing Together</h2>
+        <h2 className={styles.title}>Let's Build the Future</h2>
         <div className={styles.content}>
           <form className={styles.form} onSubmit={handleSubmit}>
             <input
