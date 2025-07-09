@@ -1,0 +1,42 @@
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@700,400&display=swap');
+
+:root {
+  /* Font */
+  --font-main: 'Satoshi', sans-serif;
+
+  /* Semantic Colors - Dark Theme */
+  --color-background: #121212;
+  --color-surface: #1E1E1E; /* For cards, headers */
+  --color-text: #F9F9F9;
+  --color-text-secondary: #A9A9A9;
+  --color-border: #333333;
+  --color-primary: #0F2C44;
+  --color-primary-hover: #6B7280; /* Changed to bluish-gray */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--color-background); /* Restore the base background color */
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  /* No specific styles for main on mobile anymore, handled by sections */
+}
