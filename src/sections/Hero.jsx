@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import styles from './Hero.module.css';
 import heroLogo from '@/assets/images/LogoTransparent.png';
 
-// Import base paths without extension
-import heroVideo from '@/assets/videos/hero-background';
+// Import assets directly to get their final paths from Vite
+import heroVideoWebm from '@/assets/videos/hero-background.webm';
+import heroVideoMp4 from '@/assets/videos/hero-background.mp4';
 
 const Hero = () => {
   return (
@@ -15,10 +16,9 @@ const Hero = () => {
         loop
         muted
         playsInline
-        poster={`${heroVideo}.jpg`} // Optional: a placeholder image
       >
-        <source src={`${heroVideo}.webm`} type="video/webm" />
-        <source src={`${heroVideo}.mp4`} type="video/mp4" />
+        <source src={heroVideoWebm} type="video/webm" />
+        <source src={heroVideoMp4} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       <div className={styles.overlay}></div>

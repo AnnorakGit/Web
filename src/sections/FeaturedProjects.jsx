@@ -7,41 +7,48 @@ import styles from './FeaturedProjects.module.css';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 
-// Import videos
-import saferHoldingVideo from '../assets/videos/SaferHoldingAnimatedLogo.mp4';
-import cascadeVideo from '../assets/videos/CascadeLogoAnimated.mp4';
-import proposalsVideo from '../assets/videos/7247869-hd_1920_1080_30fps.mp4';
-import dueDateDiligenceVideo from '../assets/videos/5716913-uhd_3840_2160_25fps.mp4';
-import complianceVideo from '../assets/videos/2314024-uhd_3840_2160_24fps.mp4';
-import transformationVideo from '../assets/videos/BussinesArch.mp4';
+// Import all project videos directly, only if they exist
+import annorakMp4 from '@/assets/videos/AnnorakIntelligendeGroup.mp4';
+import saferHoldingWebm from '@/assets/videos/SaferHoldingAnimatedLogo.webm';
+import saferHoldingMp4 from '@/assets/videos/SaferHoldingAnimatedLogo.mp4';
+import businessArchWebm from '@/assets/videos/BussinesArch.webm';
+import businessArchMp4 from '@/assets/videos/BussinesArch.mp4';
+import industrialAutoWebm from '@/assets/videos/7247869-hd_1920_1080_30fps.webm';
+import industrialAutoMp4 from '@/assets/videos/7247869-hd_1920_1080_30fps.mp4';
+import cascadeWebm from '@/assets/videos/CascadeLogoAnimated.webm';
+import cascadeMp4 from '@/assets/videos/CascadeLogoAnimated.mp4';
 
 
-// Import just the base names of the videos, without extension
 const projectsData = [
   {
     title: 'Annorak Intelligence Group',
     description: 'Corporate brand development and internal management system.',
-    videoName: 'AnnorakIntelligendeGroup',
+    webmSrc: null, // No .webm available for this video
+    mp4Src: annorakMp4,
   },
   {
     title: 'SaferHolding',
     description: 'Web platform for comprehensive management of rental properties.',
-    videoName: 'SaferHoldingAnimatedLogo',
+    webmSrc: saferHoldingWebm,
+    mp4Src: saferHoldingMp4,
   },
   {
     title: 'Business Architecture',
     description: 'Consulting and implementation of scalable business systems.',
-    videoName: 'BussinesArch',
+    webmSrc: businessArchWebm,
+    mp4Src: businessArchMp4,
   },
   {
     title: 'Industrial Automation',
     description: 'Process optimization through robotics and automated systems.',
-    videoName: '7247869-hd_1920_1080_30fps',
+    webmSrc: industrialAutoWebm,
+    mp4Src: industrialAutoMp4,
   },
   {
     title: 'Cascade',
     description: 'Development of high-availability, real-time data streaming services.',
-    videoName: 'CascadeLogoAnimated',
+    webmSrc: cascadeWebm,
+    mp4Src: cascadeMp4,
   },
 ];
 
@@ -50,13 +57,10 @@ const FeaturedProjects = () => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 2,
+    slidesToShow: 3,
     slidesToScroll: 1,
-    centerMode: true,
-    centerPadding: '0',
     autoplay: true,
-    autoplaySpeed: 4000,
-    pauseOnHover: true,
+    autoplaySpeed: 3000,
     responsive: [
       {
         breakpoint: 1024,
@@ -65,10 +69,9 @@ const FeaturedProjects = () => {
         }
       },
       {
-        breakpoint: 768,
+        breakpoint: 600,
         settings: {
           slidesToShow: 1,
-          centerMode: false,
         }
       }
     ]
@@ -84,7 +87,8 @@ const FeaturedProjects = () => {
               <ProjectCard
                 title={project.title}
                 description={project.description}
-                videoName={project.videoName} // Pass the base name
+                webmSrc={project.webmSrc}
+                mp4Src={project.mp4Src}
               />
             </div>
           ))}
