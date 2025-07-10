@@ -1,11 +1,70 @@
 import { Resend } from 'resend';
-import path from 'path';
-import fs from 'fs/promises';
 import { parseISO, format } from 'date-fns';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const toEmail = process.env.TO_EMAIL;
 const fromEmail = process.env.FROM_EMAIL;
+
+// --- Email Templates embedded directly in the code ---
+
+const newBookingTemplate = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: sans-serif; }
+    .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; }
+    .header { font-size: 24px; font-weight: bold; margin-bottom: 20px; }
+    .content { font-size: 16px; }
+    .info { margin: 20px 0; }
+    .info p { margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">New Meeting Booking</div>
+    <div class="content">
+      <p>A new discovery call has been booked. Please follow up soon.</p>
+      <div class="info">
+        <p><strong>Name:</strong> {{name}}</p>
+        <p><strong>Email:</strong> {{email}}</p>
+        <p><strong>Time:</strong> {{dateTime}}</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+`;
+
+const confirmationTemplate = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: sans-serif; }
+    .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; }
+    .header { font-size: 24px; font-weight: bold; margin-bottom: 20px; }
+    .content { font-size: 16px; }
+    .info { margin: 20px 0; }
+    .info p { margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">Your Booking is Confirmed!</div>
+    <div class="content">
+      <p>Hello {{name}},</p>
+      <p>Thank you for booking a discovery call with Annorak. Your meeting is scheduled and confirmed.</p>
+      <div class="info">
+        <p><strong>Meeting Time:</strong> {{dateTime}}</p>
+      </div>
+      <p>We look forward to speaking with you.</p>
+    </div>
+  </div>
+</body>
+</html>
+`;
+
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -13,27 +72,15 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Read the body ONCE and store its values in constants.
     const { name, email, dateTime } = req.body;
 
-    // Validate the received data.
     if (!name || !email || !dateTime) {
-      console.error('Validation failed. Missing data.', { name, email, dateTime });
-      return res.status(400).json({ error: 'Missing required fields: name, email, or dateTime.' });
+      return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Format the date for human-readable output using date-fns
-    const date = parseISO(dateTime); // Safely parse the ISO string
+    const date = parseISO(dateTime);
     const formattedDateTime = format(date, "EEEE, MMMM d, yyyy 'at' h:mm a");
 
-    // Read HTML templates
-    const newBookingTemplatePath = path.join(process.cwd(), 'out', 'NewBookingEmail.html');
-    const confirmationTemplatePath = path.join(process.cwd(), 'out', 'BookingConfirmationEmail.html');
-
-    const newBookingTemplate = await fs.readFile(newBookingTemplatePath, 'utf-8');
-    const confirmationTemplate = await fs.readFile(confirmationTemplatePath, 'utf-8');
-
-    // Personalize templates with the constants
     const personalizedNewBookingEmail = newBookingTemplate
       .replace(/{{name}}/g, name)
       .replace(/{{email}}/g, email)
@@ -42,8 +89,6 @@ export default async function handler(req, res) {
     const personalizedConfirmationEmail = confirmationTemplate
       .replace(/{{name}}/g, name)
       .replace(/{{dateTime}}/g, formattedDateTime);
-
-    // --- Send Final Emails ---
 
     // Email to Annorak (Internal Notification)
     await resend.emails.send({
@@ -64,10 +109,9 @@ export default async function handler(req, res) {
     return res.status(200).json({ message: 'Emails sent successfully!' });
 
   } catch (error) {
-    console.error('Error in /api/book-meeting:', {
+    console.error('Final error in /api/book-meeting:', {
         errorMessage: error.message,
         errorStack: error.stack,
-        requestBody: req.body, // This might be empty here, which is expected if the error is post-parsing
     });
     return res.status(500).json({ error: 'An internal error occurred.' });
   }
