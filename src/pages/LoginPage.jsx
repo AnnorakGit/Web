@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-// We will use supabase client later for authentication
-// import { supabase } from '../supabaseClient';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../supabaseClient';
 
 const LoginContainer = styled.div`
   min-height: 100vh;
@@ -70,15 +70,32 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-    // Logic to sign in with Supabase will go here
-    console.log('Logging in with:', { email, password });
-    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network request
-    setLoading(false);
+    
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      // If login is successful, Supabase handles the session.
+      // Navigate to the dashboard.
+      navigate('/admin/dashboard');
+
+    } catch (error) {
+      setError(error.message || 'Failed to log in. Please check your credentials.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

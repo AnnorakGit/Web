@@ -32,18 +32,20 @@ const servicesData = [
 const Services = () => {
   return (
     <section className={styles.services} id="services">
-      <h2 className={styles.title}>What We Offer</h2>
-      <div className={styles.grid}>
-        {servicesData.map((service, index) => (
-          <ServiceCard
-            key={index}
-            index={index}
-            icon={service.icon}
-            title={service.title}
-            description={service.description}
-            imageSrc={service.imageSrc}
-          />
-        ))}
+      <div className={styles.container}>
+        <h2 className={styles.title}>What We Offer</h2>
+        <div className={styles.grid}>
+          {servicesData.map((service, index) => (
+            <ServiceCard
+              key={index}
+              index={index}
+              icon={service.icon}
+              title={service.title}
+              description={service.description}
+              imageSrc={service.imageSrc}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

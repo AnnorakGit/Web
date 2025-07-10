@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-// import { supabase } from '../supabaseClient';
-// import { useNavigate } from 'react-router-dom';
+import { supabase } from '../supabaseClient';
+import { useNavigate } from 'react-router-dom';
 
 const DashboardContainer = styled.div`
   min-height: 100vh;
@@ -61,19 +61,60 @@ const mockMeetings = [
 const DashboardPage = () => {
   const [meetings, setMeetings] = useState([]);
   const [loading, setLoading] = useState(true);
-  // const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // We will fetch meetings from our API later
-    // and check for an active session.
-    setMeetings(mockMeetings);
-    setLoading(false);
-  }, []);
+    const checkUserAndFetchMeetings = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate('/login');
+        return;
+      }
+      
+      setUser(session.user);
+
+      try {
+        // Fetch the meetings from our secure API endpoint
+        const response = await fetch('/api/get-all-meetings', {
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+          },
+        });
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            // Token might be expired or invalid, sign out and redirect
+            await supabase.auth.signOut();
+            navigate('/login');
+            return;
+          }
+          throw new Error('Failed to fetch meetings.');
+        }
+
+        const data = await response.json();
+        setMeetings(data);
+
+      } catch (error) {
+        console.error('Error fetching meetings:', error);
+        // Handle error state for the user
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkUserAndFetchMeetings();
+  }, [navigate]);
 
   const handleLogout = async () => {
-    // Logic to sign out with Supabase will go here
-    console.log('Logging out...');
-    // navigate('/login');
+    setLoading(true);
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error('Error logging out:', error);
+    }
+    // The user will be redirected by the effect hook on the next render,
+    // or we can navigate manually.
+    navigate('/login');
   };
 
   if (loading) {
@@ -83,7 +124,7 @@ const DashboardPage = () => {
   return (
     <DashboardContainer>
       <LogoutButton onClick={handleLogout}>Log Out</LogoutButton>
-      <Title>Scheduled Meetings</Title>
+      <Title>Welcome, {user?.email}</Title>
       <MeetingsTable>
         <thead>
           <tr>
