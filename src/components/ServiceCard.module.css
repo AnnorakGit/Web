@@ -32,10 +32,6 @@
   transition: opacity 0.3s ease;
 }
 
-.card:hover::before {
-  opacity: 1;
-}
-
 .backgroundImage {
   position: absolute;
   top: 0;
@@ -48,9 +44,16 @@
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.card:hover .backgroundImage {
-  opacity: 0.3;
-  transform: scale(1.05);
+/* Apply hover effects only on devices that can actually hover */
+@media (hover: hover) {
+  .card:hover::before {
+    opacity: 1;
+  }
+
+  .card:hover .backgroundImage {
+    opacity: 0.3;
+    transform: scale(1.05);
+  }
 }
 
 .content {

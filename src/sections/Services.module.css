@@ -24,6 +24,13 @@
   margin: 0 auto;
 }
 
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr; /* Stack cards vertically */
+    gap: 3rem; /* Increase gap for vertical layout */
+  }
+}
+
 @media (max-width: 1024px) {
   .grid {
     grid-template-columns: repeat(2, 1fr);

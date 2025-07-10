@@ -16,37 +16,33 @@ import complianceVideo from '../assets/videos/2314024-uhd_3840_2160_24fps.mp4';
 import transformationVideo from '../assets/videos/BussinesArch.mp4';
 
 
+// Import just the base names of the videos, without extension
 const projectsData = [
   {
-    title: 'Smart Rental Management, Powered by AI',
-    description: 'A fully automated platform that takes care of invoices, utility expenses, tenant communication, contract follow-ups, and reporting.',
-    videoSrc: saferHoldingVideo
+    title: 'Annorak Intelligence Group',
+    description: 'Corporate brand development and internal management system.',
+    videoName: 'AnnorakIntelligendeGroup',
   },
   {
-    title: 'Smart Industrial Automation',
-    description: 'A unified SCADA + HMI platform that automates machine monitoring, PLC communication, 3D plant visualization, and production analytics.',
-    videoSrc: cascadeVideo
+    title: 'SaferHolding',
+    description: 'Web platform for comprehensive management of rental properties.',
+    videoName: 'SaferHoldingAnimatedLogo',
   },
   {
-    title: 'Automated Strategic Proposals',
-    description: 'Engineering automated workflows that generate complex business proposals, reducing delivery times from weeks to hours.',
-    videoSrc: proposalsVideo
+    title: 'Business Architecture',
+    description: 'Consulting and implementation of scalable business systems.',
+    videoName: 'BussinesArch',
   },
   {
-    title: 'AI-Accelerated Due Diligence',
-    description: 'Implementing intelligent systems to analyze documents and data, streamlining the due diligence process with unparalleled accuracy.',
-    videoSrc: dueDateDiligenceVideo
+    title: 'Industrial Automation',
+    description: 'Process optimization through robotics and automated systems.',
+    videoName: '7247869-hd_1920_1080_30fps',
   },
   {
-    title: 'Automated Compliance & Operations',
-    description: 'Developing solutions for automated compliance verification and employee lifecycle management, ensuring efficiency and security.',
-    videoSrc: complianceVideo
+    title: 'Cascade',
+    description: 'Development of high-availability, real-time data streaming services.',
+    videoName: 'CascadeLogoAnimated',
   },
-  {
-    title: 'Core Digital Transformation',
-    description: 'Leading end-to-end digital transformation projects, modernizing legacy systems and unlocking new levels of productivity.',
-    videoSrc: transformationVideo
-  }
 ];
 
 const FeaturedProjects = () => {
@@ -80,15 +76,15 @@ const FeaturedProjects = () => {
 
   return (
     <section className={styles.projects} id="projects">
-      <h2 className={styles.title}>Our Experience</h2>
-      <div className={styles.carouselContainer}>
+      <div className={styles.container}>
+        <h2 className={styles.title}>Featured Projects</h2>
         <Slider {...settings}>
           {projectsData.map((project, index) => (
             <div key={index} className={styles.slide}>
               <ProjectCard
                 title={project.title}
                 description={project.description}
-                videoSrc={project.videoSrc}
+                videoName={project.videoName} // Pass the base name
               />
             </div>
           ))}
