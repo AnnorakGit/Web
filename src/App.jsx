@@ -1,29 +1,26 @@
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import BackgroundVideo from './components/BackgroundVideo';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import BookingPage from './pages/BookingPage';
-
-const Layout = () => (
-  <>
-    <BackgroundVideo />
-    <Header />
-    <Outlet /> {/* This will render the matched route's component */}
-    <Footer />
-  </>
-);
+import LoginPage from './pages/LoginPage';
+import DashboardPage from './pages/DashboardPage';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<HomePage />} />
-          <Route path="book" element={<BookingPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <>
+      <Header />
+      <main>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/book" element={<BookingPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/admin/dashboard" element={<DashboardPage />} />
+        </Routes>
+      </main>
+      <Footer />
+    </>
   );
 }
 
