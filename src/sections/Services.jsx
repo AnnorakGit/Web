@@ -33,7 +33,7 @@ const Services = () => {
   return (
     <section className={styles.services} id="services">
       <div className={styles.container}>
-        <h2 className={styles.title}>What We Offer</h2>
+        <h2 className={styles.title}>Services</h2>
         <div className={styles.grid}>
           {servicesData.map((service, index) => (
             <ServiceCard
