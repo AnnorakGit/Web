@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Calendar from 'react-calendar';
 import { getDay, format } from 'date-fns';
@@ -180,8 +180,36 @@ const BookingPage = () => {
   const [email, setEmail] = useState('');
   const [date, setDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(null);
+  const [occupiedTimes, setOccupiedTimes] = useState([]);
+  const [isLoadingTimes, setIsLoadingTimes] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
+
+  useEffect(() => {
+    const fetchOccupiedTimes = async () => {
+      setIsLoadingTimes(true);
+      setOccupiedTimes([]); // Reset on date change
+      
+      const formattedDate = format(date, 'yyyy-MM-dd');
+
+      try {
+        const response = await fetch(`/api/get-occupied-times?date=${formattedDate}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch time slots.');
+        }
+        const data = await response.json();
+        setOccupiedTimes(data);
+      } catch (error) {
+        console.error("Error fetching occupied times:", error);
+        // Optionally set an error message for the user
+      } finally {
+        setIsLoadingTimes(false);
+      }
+    };
+
+    fetchOccupiedTimes();
+  }, [date]);
+
 
   const isWeekday = (date) => {
     const day = getDay(date);
@@ -272,24 +300,29 @@ const BookingPage = () => {
             />
           </CalendarWrapper>
           <TimeSelectionWrapper>
-            <p>Select a time for: <strong>{format(date, 'EEEE, MMMM d, yyyy')}</strong></p>
-            <TimeSlotsGrid>
-              {availableTimes.map(time => (
-                <TimeSlotButton 
-                  key={time}
-                  type="button"
-                  onClick={() => setSelectedTime(time)}
-                  selected={selectedTime === time}
-                >
-                  {time}
-                </TimeSlotButton>
-              ))}
-            </TimeSlotsGrid>
+            <h3>Select a Time</h3>
+            {isLoadingTimes ? (
+              <p>Loading available times...</p>
+            ) : (
+              <TimeSlotsGrid>
+                {availableTimes.map((time) => (
+                  <TimeSlotButton
+                    key={time}
+                    type="button"
+                    onClick={() => setSelectedTime(time)}
+                    selected={selectedTime === time}
+                    disabled={occupiedTimes.includes(time)}
+                  >
+                    {time}
+                  </TimeSlotButton>
+                ))}
+              </TimeSlotsGrid>
+            )}
           </TimeSelectionWrapper>
         </BookingLayout>
 
-        <Button type="submit" disabled={isSubmitting || !selectedTime}>
-            {isSubmitting ? 'Scheduling...' : 'Schedule Meeting'}
+        <Button type="submit" disabled={isSubmitting || !selectedTime || !name || !email}>
+          {isSubmitting ? 'Booking...' : 'Confirm Booking'}
         </Button>
       </Form>
       {message && <Message type={message.type}>{message.text}</Message>}
