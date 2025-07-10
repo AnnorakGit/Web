@@ -70,18 +70,19 @@ const FeaturedProjects = () => {
   };
 
   return (
-    <section className={styles.featuredProjects} id="projects">
+    <section className={styles.projects} id="projects">
       <h2 className={styles.title}>Featured Projects</h2>
       <div className={styles.carouselContainer}>
         <Slider {...settings}>
           {projects.map((project, index) => (
-            <ProjectCard
-              key={index}
-              title={project.title}
-              description={project.description}
-              videoSrc={project.videoSrc}
-              tags={project.tags}
-            />
+            <div key={index} className={styles.slide}>
+              <ProjectCard
+                title={project.title}
+                description={project.description}
+                videoSrc={project.videoSrc}
+                tags={project.tags}
+              />
+            </div>
           ))}
         </Slider>
       </div>

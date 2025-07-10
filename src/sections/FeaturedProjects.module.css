@@ -1,5 +1,6 @@
 .projects {
   padding: 100px 5%;
+  width: 100%;
 }
 
 .title {
@@ -11,12 +12,12 @@
 }
 
 .carouselContainer {
-  max-width: 1600px;
+  max-width: 1200px; /* Reduced max-width for better alignment */
   margin: 0 auto;
 }
 
 .slide {
-  padding: 0 15px;
+  padding: 0 10px; /* Restored padding for spacing between cards */
 }
 
 /* Custom Slick Slider Styles */
