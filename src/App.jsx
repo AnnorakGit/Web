@@ -4,23 +4,18 @@ import HomePage from './pages/HomePage';
 import BookingPage from './pages/BookingPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Layout from './components/Layout';
 
 function App() {
   return (
-    <>
-      <Header />
-      <main>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/book" element={<BookingPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/admin/dashboard" element={<DashboardPage />} />
-        </Routes>
-      </main>
-      <Footer />
-    </>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<HomePage />} />
+        <Route path="book" element={<BookingPage />} />
+        <Route path="login" element={<LoginPage />} />
+        <Route path="admin/dashboard" element={<DashboardPage />} />
+      </Route>
+    </Routes>
   );
 }
 
