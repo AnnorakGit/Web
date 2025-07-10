@@ -93,11 +93,6 @@
 @media (max-width: 900px) {
   .content {
     grid-template-columns: 1fr;
-    gap: 3rem; /* Adjust gap for mobile */
-  }
-
-  .info {
-    text-align: center; /* Center contact info on mobile */
   }
 }
 

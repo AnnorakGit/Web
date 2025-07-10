@@ -67,16 +67,4 @@
 
 .link:hover {
   color: #a0a0a0;
-}
-
-/* Apply hover effects only on devices that can actually hover */
-@media (hover: hover) {
-  .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  }
-  
-  .link:hover {
-    color: #a0a0a0;
-  }
 } 

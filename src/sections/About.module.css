@@ -27,10 +27,9 @@
 }
 
 .content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Push content to top and bottom */
 }
 
 .title {
@@ -67,9 +66,6 @@
 @media (max-width: 900px) {
   .container {
     grid-template-columns: 1fr;
-  }
-  .content {
-    grid-template-columns: 1fr; /* Stack columns on mobile */
   }
 }
 

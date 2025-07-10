@@ -7,49 +7,46 @@ import styles from './FeaturedProjects.module.css';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 
-// Import all project videos directly, only if they exist
-import annorakMp4 from '@/assets/videos/AnnorakIntelligendeGroup.mp4';
-import saferHoldingWebm from '@/assets/videos/SaferHoldingAnimatedLogo.webm';
-import saferHoldingMp4 from '@/assets/videos/SaferHoldingAnimatedLogo.mp4';
-import businessArchWebm from '@/assets/videos/BussinesArch.webm';
-import businessArchMp4 from '@/assets/videos/BussinesArch.mp4';
-import industrialAutoWebm from '@/assets/videos/7247869-hd_1920_1080_30fps.webm';
-import industrialAutoMp4 from '@/assets/videos/7247869-hd_1920_1080_30fps.mp4';
-import cascadeWebm from '@/assets/videos/CascadeLogoAnimated.webm';
-import cascadeMp4 from '@/assets/videos/CascadeLogoAnimated.mp4';
+// Import videos
+import saferHoldingVideo from '../assets/videos/SaferHoldingAnimatedLogo.mp4';
+import cascadeVideo from '../assets/videos/CascadeLogoAnimated.mp4';
+import proposalsVideo from '../assets/videos/7247869-hd_1920_1080_30fps.mp4';
+import dueDateDiligenceVideo from '../assets/videos/5716913-uhd_3840_2160_25fps.mp4';
+import complianceVideo from '../assets/videos/2314024-uhd_3840_2160_24fps.mp4';
+import transformationVideo from '../assets/videos/BussinesArch.mp4';
 
 
 const projectsData = [
   {
-    title: 'Annorak Intelligence Group',
-    description: 'Corporate brand development and internal management system.',
-    webmSrc: null, // No .webm available for this video
-    mp4Src: annorakMp4,
+    title: 'Smart Rental Management, Powered by AI',
+    description: 'A fully automated platform that takes care of invoices, utility expenses, tenant communication, contract follow-ups, and reporting.',
+    videoSrc: saferHoldingVideo
   },
   {
-    title: 'SaferHolding',
-    description: 'Web platform for comprehensive management of rental properties.',
-    webmSrc: saferHoldingWebm,
-    mp4Src: saferHoldingMp4,
+    title: 'Smart Industrial Automation',
+    description: 'A unified SCADA + HMI platform that automates machine monitoring, PLC communication, 3D plant visualization, and production analytics.',
+    videoSrc: cascadeVideo
   },
   {
-    title: 'Business Architecture',
-    description: 'Consulting and implementation of scalable business systems.',
-    webmSrc: businessArchWebm,
-    mp4Src: businessArchMp4,
+    title: 'Automated Strategic Proposals',
+    description: 'Engineering automated workflows that generate complex business proposals, reducing delivery times from weeks to hours.',
+    videoSrc: proposalsVideo
   },
   {
-    title: 'Industrial Automation',
-    description: 'Process optimization through robotics and automated systems.',
-    webmSrc: industrialAutoWebm,
-    mp4Src: industrialAutoMp4,
+    title: 'AI-Accelerated Due Diligence',
+    description: 'Implementing intelligent systems to analyze documents and data, streamlining the due diligence process with unparalleled accuracy.',
+    videoSrc: dueDateDiligenceVideo
   },
   {
-    title: 'Cascade',
-    description: 'Development of high-availability, real-time data streaming services.',
-    webmSrc: cascadeWebm,
-    mp4Src: cascadeMp4,
+    title: 'Automated Compliance & Operations',
+    description: 'Developing solutions for automated compliance verification and employee lifecycle management, ensuring efficiency and security.',
+    videoSrc: complianceVideo
   },
+  {
+    title: 'Core Digital Transformation',
+    description: 'Leading end-to-end digital transformation projects, modernizing legacy systems and unlocking new levels of productivity.',
+    videoSrc: transformationVideo
+  }
 ];
 
 const FeaturedProjects = () => {
@@ -57,10 +54,13 @@ const FeaturedProjects = () => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 2,
     slidesToScroll: 1,
+    centerMode: true,
+    centerPadding: '0',
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 4000,
+    pauseOnHover: true,
     responsive: [
       {
         breakpoint: 1024,
@@ -69,9 +69,10 @@ const FeaturedProjects = () => {
         }
       },
       {
-        breakpoint: 600,
+        breakpoint: 768,
         settings: {
           slidesToShow: 1,
+          centerMode: false,
         }
       }
     ]
@@ -79,16 +80,15 @@ const FeaturedProjects = () => {
 
   return (
     <section className={styles.projects} id="projects">
-      <div className={styles.container}>
-        <h2 className={styles.title}>Featured Projects</h2>
+      <h2 className={styles.title}>Our Experience</h2>
+      <div className={styles.carouselContainer}>
         <Slider {...settings}>
           {projectsData.map((project, index) => (
             <div key={index} className={styles.slide}>
               <ProjectCard
                 title={project.title}
                 description={project.description}
-                webmSrc={project.webmSrc}
-                mp4Src={project.mp4Src}
+                videoSrc={project.videoSrc}
               />
             </div>
           ))}
