@@ -17,7 +17,7 @@ import complianceVideo from '../assets/videos/2314024-uhd_3840_2160_24fps.webm';
 
 const projects = [
   {
-    title: 'Smart Rental Management, Powered by AI',
+    title: 'Automated Rental Management',
     description: 'A fully automated platform that takes care of invoices, utility expenses, tenant communication, contract follow-ups, and reporting.',
     videoSrc: saferHoldingVideo,
     tags: ['AI', 'Automation', 'SaaS'],
