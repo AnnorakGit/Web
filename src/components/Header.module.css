@@ -54,17 +54,6 @@
   background-color: #5a616b;
 }
 
-.adminLink {
-  color: #888;
-  text-decoration: none;
-  margin-left: 1rem;
-  transition: color 0.3s ease;
-}
-
-.adminLink:hover {
-  color: #EFEFEF;
-}
-
 @media (max-width: 768px) {
   .header {
     padding: 1rem 24px;

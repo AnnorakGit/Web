@@ -15,7 +15,6 @@ const Header = () => {
         <a href="/#about">About</a>
         <a href="/#contact">Contact</a>
         <Link to="/book" className={styles.ctaButton}>Book a Call</Link>
-        <Link to="/login" className={styles.adminLink}>Admin</Link>
       </nav>
     </header>
   );

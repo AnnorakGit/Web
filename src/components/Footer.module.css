@@ -29,6 +29,21 @@
 .legal {
   font-size: 0.875rem;
   color: var(--color-text-secondary);
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.adminLink {
+  color: #555;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  border-left: 1px solid #444;
+  padding-left: 1rem;
+}
+
+.adminLink:hover {
+  color: #999;
 }
 
 @media (min-width: 768px) {
