@@ -1,10 +1,10 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY; // Use service key for admin access
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY; // Corrected to match Vercel env variable
 
 if (!supabaseUrl || !supabaseServiceKey) {
-  throw new Error("Supabase credentials for admin are not defined.");
+  throw new Error("Supabase credentials for admin are not defined. Check VITE_SUPABASE_URL and SUPABASE_SERVICE_KEY in Vercel.");
 }
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
