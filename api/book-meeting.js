@@ -85,9 +85,9 @@ export default async function handler(req, res) {
 
   // We wrap the entire logic in a try/catch for unexpected errors.
   try {
-    const { name, email, dateTime } = req.body;
+    const { name, email, dateTime, purpose, description } = req.body;
 
-    if (!name || !email || !dateTime) {
+    if (!name || !email || !dateTime || !purpose) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -143,7 +143,9 @@ export default async function handler(req, res) {
           { 
             client_name: name, 
             client_email: email, 
-            meeting_time: dateTime // Use the original ISO string for the timestamp field
+            meeting_time: dateTime,
+            meeting_purpose: purpose,
+            meeting_description: description,
           }
         ]);
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { useAuth } from '../context/AuthContext';
 import { format, parseISO } from 'date-fns';
@@ -62,6 +62,7 @@ const HeaderRow = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  flex-wrap: wrap; /* Allows items to wrap on smaller screens */
 `;
 
 const WelcomeMessage = styled.h1`
@@ -103,6 +104,47 @@ const DatePickerWrapper = styled.div`
   }
 `;
 
+const ActionButton = styled.button`
+  padding: 0.4rem 0.8rem;
+  font-family: 'Satoshi-Regular', sans-serif;
+  border: 1px solid #444;
+  border-radius: 6px;
+  background-color: #2a2a2f;
+  color: #EFEFEF;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #c94a4a;
+    border-color: #c94a4a;
+  }
+`;
+
+const DescriptionCell = styled.td`
+  max-width: 300px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+`;
+
+const NavLink = styled(Link)`
+  font-family: 'Satoshi-Regular', sans-serif;
+  font-size: 1.1rem;
+  color: #EFEFEF;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  background-color: #333;
+
+  &:hover {
+    background-color: #444;
+  }
+`;
+
+const RightAlignedContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
 
 // Mock data until we connect the API
 const mockMeetings = [
@@ -187,6 +229,32 @@ const DashboardPage = () => {
     navigate('/login'); // Navigate immediately after sign out
   };
 
+  const handleDelete = async (meetingId) => {
+    if (window.confirm('Are you sure you want to delete this meeting?')) {
+      try {
+        const response = await fetch('/api/delete-meeting', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({ id: meetingId }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to delete meeting.');
+        }
+
+        // Remove the meeting from the state to update the UI instantly
+        setAllMeetings(prev => prev.filter(m => m.id !== meetingId));
+
+      } catch (error) {
+        console.error('Error deleting meeting:', error);
+        alert('Could not delete the meeting. Please try again.');
+      }
+    }
+  };
+
   if (authLoading) {
     return <DashboardContainer><p>Initializing...</p></DashboardContainer>;
   }
@@ -195,7 +263,10 @@ const DashboardPage = () => {
     <DashboardContainer>
       <HeaderRow>
         <WelcomeMessage>Welcome, {user?.email}</WelcomeMessage>
-        <LogoutButton onClick={handleLogout}>Log Out</LogoutButton>
+        <RightAlignedContainer>
+          <NavLink to="/admin/messages">View Messages</NavLink>
+          <LogoutButton onClick={handleLogout}>Log Out</LogoutButton>
+        </RightAlignedContainer>
       </HeaderRow>
 
       <FilterContainer>
@@ -239,9 +310,11 @@ const DashboardPage = () => {
           <thead>
             <tr>
               <th>Client Name</th>
-              <th>Client Email</th>
-              <th>Date</th>
-              <th>Time</th>
+              <th>Email</th>
+              <th>Date & Time</th>
+              <th>Purpose</th>
+              <th>Description</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -249,8 +322,14 @@ const DashboardPage = () => {
               <tr key={meeting.id}>
                 <td>{meeting.client_name}</td>
                 <td>{meeting.client_email}</td>
-                <td>{format(new Date(meeting.meeting_time), 'PPP')}</td>
-                <td>{format(new Date(meeting.meeting_time), 'p')}</td>
+                <td>{format(new Date(meeting.meeting_time), 'Pp')}</td>
+                <td>{meeting.meeting_purpose}</td>
+                <DescriptionCell>{meeting.meeting_description}</DescriptionCell>
+                <td>
+                  <ActionButton onClick={() => handleDelete(meeting.id)}>
+                    Delete
+                  </ActionButton>
+                </td>
               </tr>
             ))}
           </tbody>

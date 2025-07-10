@@ -1,7 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
 
-// This function creates a Supabase client that can perform admin-level actions.
-// It's crucial to use the SERVICE_ROLE_KEY for this, not the anon key.
 const createAdminClient = () => {
   const supabaseUrl = process.env.VITE_SUPABASE_URL;
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY;
@@ -11,51 +9,48 @@ const createAdminClient = () => {
   }
   
   return createClient(supabaseUrl, supabaseServiceKey, {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false
-    }
+    auth: { autoRefreshToken: false, persistSession: false }
   });
 };
 
 export default async function handler(req, res) {
-  if (req.method !== 'GET') {
+  if (req.method !== 'DELETE') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
   try {
     const supabaseAdmin = createAdminClient();
 
-    // 1. Get the user token from the request header
+    // 1. Authenticate the user
     const token = req.headers.authorization?.split('Bearer ')[1];
     if (!token) {
       return res.status(401).json({ error: 'Authentication token not provided.' });
     }
-
-    // 2. Verify the token with Supabase to get the user
     const { data: { user }, error: userError } = await supabaseAdmin.auth.getUser(token);
     if (userError || !user) {
       return res.status(401).json({ error: 'Invalid or expired token.' });
     }
 
-    // 3. If the user is authenticated, fetch the meetings
-    //    that are scheduled for today or in the future.
-    const today = new Date().toISOString().slice(0, 10); // Get 'YYYY-MM-DD'
-
-    const { data: meetings, error: meetingsError } = await supabaseAdmin
-      .from('meetings')
-      .select('*')
-      .gte('meeting_time', today) // Only get meetings from today onwards
-      .order('meeting_time', { ascending: true });
-
-    if (meetingsError) {
-      throw meetingsError;
+    // 2. Get the meeting ID from the request body
+    const { id } = req.body;
+    if (!id) {
+      return res.status(400).json({ error: 'Meeting ID is required.' });
     }
 
-    return res.status(200).json(meetings);
+    // 3. If authenticated, proceed with deletion
+    const { error: deleteError } = await supabaseAdmin
+      .from('meetings')
+      .delete()
+      .eq('id', id);
+
+    if (deleteError) {
+      throw deleteError;
+    }
+
+    return res.status(200).json({ message: 'Meeting deleted successfully.' });
 
   } catch (error) {
-    console.error('Error fetching all meetings:', error);
-    return res.status(500).json({ error: 'Failed to fetch meetings.' });
+    console.error('Error deleting meeting:', error);
+    return res.status(500).json({ error: 'Failed to delete meeting.' });
   }
 } 

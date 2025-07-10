@@ -175,9 +175,34 @@ const Message = styled.p`
     color: ${props => (props.type === 'success' ? '#4ade80' : '#f87171')};
 `;
 
+const Select = styled.select`
+  padding: 1rem;
+  background-color: #1a1a1f;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #EFEFEF;
+  font-family: 'Satoshi-Regular', sans-serif;
+  font-size: 1rem;
+`;
+
+const Textarea = styled.textarea`
+  padding: 1rem;
+  background-color: #1a1a1f;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #EFEFEF;
+  font-family: 'Satoshi-Regular', sans-serif;
+  font-size: 1rem;
+  min-height: 120px;
+  resize: vertical;
+`;
+
+
 const BookingPage = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [purpose, setPurpose] = useState('');
+  const [description, setDescription] = useState('');
   const [date, setDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(null);
   const [occupiedTimes, setOccupiedTimes] = useState([]);
@@ -223,6 +248,15 @@ const BookingPage = () => {
     setSelectedTime(null);
   };
 
+  const meetingPurposes = [
+    'General Inquiry',
+    'Project Proposal',
+    'Technical Consultation',
+    'Partnership Opportunity',
+    'Follow-up',
+    'Other'
+  ];
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedTime) {
@@ -250,6 +284,8 @@ const BookingPage = () => {
           name,
           email,
           dateTime: finalDateTime.toISOString(),
+          purpose,
+          description,
         }),
       });
 
@@ -289,6 +325,15 @@ const BookingPage = () => {
           onChange={(e) => setEmail(e.target.value)}
           required 
         />
+        <Select value={purpose} onChange={(e) => setPurpose(e.target.value)} required>
+          <option value="" disabled>Select a reason for the meeting</option>
+          {meetingPurposes.map(p => <option key={p} value={p}>{p}</option>)}
+        </Select>
+        <Textarea
+          placeholder="Please provide a brief description of what you'd like to discuss."
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
         
         <BookingLayout>
           <CalendarWrapper>
@@ -321,7 +366,7 @@ const BookingPage = () => {
           </TimeSelectionWrapper>
         </BookingLayout>
 
-        <Button type="submit" disabled={isSubmitting || !selectedTime || !name || !email}>
+        <Button type="submit" disabled={isSubmitting || !selectedTime || !name || !email || !purpose}>
           {isSubmitting ? 'Booking...' : 'Confirm Booking'}
         </Button>
       </Form>

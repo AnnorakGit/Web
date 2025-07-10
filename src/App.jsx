@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage';
 import BookingPage from './pages/BookingPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
+import MessagesDashboardPage from './pages/MessagesDashboardPage'; // Import the new page
 import Header from './components/Header';
 import Footer from './components/Footer';
 import BackgroundVideo from './components/BackgroundVideo';
@@ -22,6 +23,7 @@ function AppContent() {
           <Route path="/book" element={<BookingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/admin/dashboard" element={<DashboardPage />} />
+          <Route path="/admin/messages" element={<MessagesDashboardPage />} /> {/* Add the new route */}
         </Routes>
       </main>
       <Footer />
