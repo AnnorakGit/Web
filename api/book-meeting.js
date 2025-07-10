@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
 import path from 'path';
 import fs from 'fs/promises';
+import { parseISO, format } from 'date-fns';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const toEmail = process.env.TO_EMAIL;
@@ -19,16 +20,9 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // --- Format the date for human-readable output ---
-    const formattedDateTime = new Date(dateTime).toLocaleString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true,
-    });
+    // --- Format the date for human-readable output using date-fns ---
+    const date = parseISO(dateTime); // Safely parse the ISO string
+    const formattedDateTime = format(date, "EEEE, MMMM d, yyyy 'at' h:mm a");
 
 
     // --- 1. Read HTML templates ---
