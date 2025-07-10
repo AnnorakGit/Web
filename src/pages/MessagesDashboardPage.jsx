@@ -146,9 +146,9 @@ const MessagesDashboardPage = () => {
           {messages.map((msg) => (
             <tr key={msg.id} className={msg.is_read ? 'is_read' : ''}>
               <td>{format(new Date(msg.created_at), 'Pp')}</td>
-              <td>{msg.sender_name}</td>
-              <td>{msg.sender_email}</td>
-              <MessageContentCell>{msg.message_text}</MessageContentCell>
+              <td>{msg.name}</td>
+              <td>{msg.email}</td>
+              <MessageContentCell>{msg.message}</MessageContentCell>
               <td>{msg.is_read ? 'Read' : 'Unread'}</td>
               <td>
                 <ActionButton onClick={() => handleToggleRead(msg.id, msg.is_read)}>
