@@ -26,7 +26,7 @@ export default async (req, res) => {
     try {
       const { error: dbError } = await supabase
         .from('contact_messages')
-        .insert([{ sender_name: name, sender_email: email, message_content: message }]);
+        .insert([{ sender_name: name, sender_email: email, message_text: message }]); // Corrected column name
       
       if (dbError) {
         // Log the error but don't stop the email from sending

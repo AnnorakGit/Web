@@ -148,7 +148,7 @@ const MessagesDashboardPage = () => {
               <td>{format(new Date(msg.created_at), 'Pp')}</td>
               <td>{msg.sender_name}</td>
               <td>{msg.sender_email}</td>
-              <MessageContentCell>{msg.message_content}</MessageContentCell>
+              <MessageContentCell>{msg.message_text}</MessageContentCell>
               <td>{msg.is_read ? 'Read' : 'Unread'}</td>
               <td>
                 <ActionButton onClick={() => handleToggleRead(msg.id, msg.is_read)}>
