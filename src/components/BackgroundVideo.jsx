@@ -1,6 +1,6 @@
 import React from 'react';
+import backgroundVideo from '@/assets/videos/site-background.webm';
 import styles from './BackgroundVideo.module.css';
-import backgroundVideo from '@/assets/videos/site-background.mp4';
 
 const BackgroundVideo = () => {
   return (

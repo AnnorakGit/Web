@@ -7,46 +7,37 @@ import styles from './FeaturedProjects.module.css';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 
-// Import videos
-import saferHoldingVideo from '../assets/videos/SaferHoldingAnimatedLogo.mp4';
-import cascadeVideo from '../assets/videos/CascadeLogoAnimated.mp4';
-import proposalsVideo from '../assets/videos/7247869-hd_1920_1080_30fps.mp4';
-import dueDateDiligenceVideo from '../assets/videos/5716913-uhd_3840_2160_25fps.mp4';
-import complianceVideo from '../assets/videos/2314024-uhd_3840_2160_24fps.mp4';
-import transformationVideo from '../assets/videos/BussinesArch.mp4';
+// Import .webm videos
+import saferHoldingVideo from '../assets/videos/SaferHoldingAnimatedLogo.webm';
+import businessArchVideo from '../assets/videos/BussinesArch.webm';
+import cascadeVideo from '../assets/videos/CascadeLogoAnimated.webm';
+import rentalAutomationVideo from '../assets/videos/7247869-hd_1920_1080_30fps.webm';
 
-
-const projectsData = [
+const projects = [
   {
-    title: 'Smart Rental Management, Powered by AI',
-    description: 'A fully automated platform that takes care of invoices, utility expenses, tenant communication, contract follow-ups, and reporting.',
-    videoSrc: saferHoldingVideo
+    title: 'Rental Management Automation',
+    description: 'A complete system to automate guest check-ins, communications, and manage cleaning schedules for vacation rentals.',
+    videoSrc: rentalAutomationVideo,
+    tags: ['React', 'Node.js', 'Automation', 'API'],
   },
   {
-    title: 'Smart Industrial Automation',
-    description: 'A unified SCADA + HMI platform that automates machine monitoring, PLC communication, 3D plant visualization, and production analytics.',
-    videoSrc: cascadeVideo
+    title: 'Industrial Process Control',
+    description: 'Real-time monitoring and control software for industrial machinery, reducing downtime and improving efficiency.',
+    videoSrc: businessArchVideo,
+    tags: ['Python', 'SCADA', 'IoT', 'Real-Time'],
   },
   {
-    title: 'Automated Strategic Proposals',
-    description: 'Engineering automated workflows that generate complex business proposals, reducing delivery times from weeks to hours.',
-    videoSrc: proposalsVideo
+    title: 'Business Intelligence Dashboard',
+    description: 'A financial analytics dashboard providing key insights and data visualizations for strategic decision-making.',
+    videoSrc: saferHoldingVideo,
+    tags: ['React', 'D3.js', 'Data-Viz', 'Finance'],
   },
   {
-    title: 'AI-Accelerated Due Diligence',
-    description: 'Implementing intelligent systems to analyze documents and data, streamlining the due diligence process with unparalleled accuracy.',
-    videoSrc: dueDateDiligenceVideo
+    title: 'E-commerce Recommendation Engine',
+    description: 'An AI-powered engine that personalizes product recommendations, increasing user engagement and sales.',
+    videoSrc: cascadeVideo,
+    tags: ['AI/ML', 'Python', 'E-commerce', 'API'],
   },
-  {
-    title: 'Automated Compliance & Operations',
-    description: 'Developing solutions for automated compliance verification and employee lifecycle management, ensuring efficiency and security.',
-    videoSrc: complianceVideo
-  },
-  {
-    title: 'Core Digital Transformation',
-    description: 'Leading end-to-end digital transformation projects, modernizing legacy systems and unlocking new levels of productivity.',
-    videoSrc: transformationVideo
-  }
 ];
 
 const FeaturedProjects = () => {
@@ -79,18 +70,18 @@ const FeaturedProjects = () => {
   };
 
   return (
-    <section className={styles.projects} id="projects">
-      <h2 className={styles.title}>Our Experience</h2>
+    <section className={styles.featuredProjects} id="projects">
+      <h2 className={styles.title}>Featured Projects</h2>
       <div className={styles.carouselContainer}>
         <Slider {...settings}>
-          {projectsData.map((project, index) => (
-            <div key={index} className={styles.slide}>
-              <ProjectCard
-                title={project.title}
-                description={project.description}
-                videoSrc={project.videoSrc}
-              />
-            </div>
+          {projects.map((project, index) => (
+            <ProjectCard
+              key={index}
+              title={project.title}
+              description={project.description}
+              videoSrc={project.videoSrc}
+              tags={project.tags}
+            />
           ))}
         </Slider>
       </div>

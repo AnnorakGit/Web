@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Hero.module.css';
 import heroLogo from '@/assets/images/LogoTransparent.png';
-import heroVideo from '@/assets/videos/hero-background.mp4';
+import heroVideo from '@/assets/videos/hero-background.webm';
 
 const Hero = () => {
   return (
