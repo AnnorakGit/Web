@@ -83,9 +83,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  // We wrap the entire logic in a try/catch for unexpected errors.
   try {
-    const { name, email, dateTime, purpose, description } = req.body;
+    const { name, email, dateTime, purpose, description, isInternal } = req.body;
 
     if (!name || !email || !dateTime || !purpose) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -103,41 +102,11 @@ export default async function handler(req, res) {
       .replace(/{{name}}/g, name)
       .replace(/{{dateTime}}/g, formattedDateTime);
     
-    // --- Send emails independently and report status ---
-    
-    const results = {};
-
-    // Attempt to send internal notification
-    try {
-      await resend.emails.send({
-        from: fromEmail,
-        to: [toEmail],
-        subject: `New Booking from ${name}`,
-        html: personalizedNewBookingEmail,
-      });
-      results.internal_notification = { status: 'success' };
-    } catch (error) {
-      console.error('Failed to send internal notification:', error);
-      results.internal_notification = { status: 'failed', error: error.message };
-    }
-
-    // Attempt to send client confirmation
-    try {
-      await resend.emails.send({
-        from: fromEmail,
-        to: [email],
-        subject: 'Your Meeting with Annorak is Confirmed',
-        html: personalizedConfirmationEmail,
-      });
-      results.client_confirmation = { status: 'success' };
-    } catch (error) {
-      console.error('Failed to send client confirmation:', error);
-      results.client_confirmation = { status: 'failed', error: error.message };
-    }
+    let savedMeeting; // Variable to hold the new meeting data
 
     // --- Save the booking to the database ---
     try {
-      const { error: dbError } = await supabase
+      const { data, error: dbError } = await supabase
         .from('meetings')
         .insert([
           { 
@@ -147,25 +116,52 @@ export default async function handler(req, res) {
             meeting_purpose: purpose,
             meeting_description: description,
           }
-        ]);
+        ])
+        .select() // This is crucial to return the inserted row
+        .single(); // Return as a single object, not an array
 
       if (dbError) {
         throw dbError;
       }
-      results.database_save = { status: 'success' };
+      savedMeeting = data; // Store the returned data
     } catch (error) {
-      console.error('Failed to save booking to database:', error);
-      results.database_save = { status: 'failed', error: error.message };
-      // Optional: You might want to handle this more gracefully,
-      // e.g., by sending an alert email to the admin.
+      console.error('Database insertion error:', error);
+      return res.status(500).json({ error: 'Failed to create the meeting in the database.' });
     }
 
-    // If the client confirmation failed, it's likely due to Resend's sandbox mode.
-    // The most critical email (internal) was attempted, so we can return a success status.
-    return res.status(200).json({ 
-      message: 'Email process completed.',
-      details: results 
-    });
+    // --- Conditionally send emails ---
+    if (!isInternal) {
+      // Attempt to send internal notification
+      try {
+        await resend.emails.send({
+          from: fromEmail,
+          to: [toEmail],
+          subject: `New Booking from ${name}`,
+          html: personalizedNewBookingEmail,
+        });
+        // results.internal_notification = { status: 'success' }; // This line was removed as per new_code
+      } catch (error) {
+        console.error('Failed to send internal notification:', error);
+        // results.internal_notification = { status: 'failed', error: error.message }; // This line was removed as per new_code
+      }
+
+      // Attempt to send client confirmation
+      try {
+        await resend.emails.send({
+          from: fromEmail,
+          to: [email],
+          subject: 'Your Meeting with Annorak is Confirmed',
+          html: personalizedConfirmationEmail,
+        });
+        // results.client_confirmation = { status: 'success' }; // This line was removed as per new_code
+      } catch (error) {
+        console.error('Failed to send client confirmation:', error);
+        // results.client_confirmation = { status: 'failed', error: error.message }; // This line was removed as per new_code
+      }
+    }
+
+    // Return a success response with the new meeting data
+    res.status(200).json({ message: 'Booking successful!', data: savedMeeting });
 
   } catch (error) {
     console.error('Critical error in /api/book-meeting:', {

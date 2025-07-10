@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { useAuth } from '../context/AuthContext';
+import MeetingCreationModal from '../components/MeetingCreationModal'; // Import the modal
 import { format, parseISO } from 'date-fns';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
@@ -120,6 +121,15 @@ const ActionButton = styled.button`
   }
 `;
 
+const CreateMeetingButton = styled(ActionButton)`
+  background-color: #6B7280;
+  color: white;
+
+  &:hover {
+    background-color: #5a616b;
+  }
+`;
+
 const DescriptionCell = styled.td`
   max-width: 300px;
   white-space: pre-wrap;
@@ -156,6 +166,7 @@ const DashboardPage = () => {
   const [allMeetings, setAllMeetings] = useState([]);
   const [filteredMeetings, setFilteredMeetings] = useState([]);
   const [loadingMeetings, setLoadingMeetings] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal
   
   // Filter states
   const [searchTerm, setSearchTerm] = useState('');
@@ -255,15 +266,31 @@ const DashboardPage = () => {
     }
   };
 
+  const handleMeetingCreated = (newMeeting) => {
+    // Add the new meeting to the list and re-sort
+    setAllMeetings(prevMeetings => 
+      [...prevMeetings, newMeeting].sort((a, b) => new Date(b.meeting_time) - new Date(a.meeting_time))
+    );
+  };
+
   if (authLoading) {
     return <DashboardContainer><p>Initializing...</p></DashboardContainer>;
   }
   
   return (
     <DashboardContainer>
+      <MeetingCreationModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onMeetingCreated={handleMeetingCreated}
+      />
+      
       <HeaderRow>
         <WelcomeMessage>Welcome, {user?.email}</WelcomeMessage>
         <RightAlignedContainer>
+          <CreateMeetingButton onClick={() => setIsModalOpen(true)}>
+            + Create Meeting
+          </CreateMeetingButton>
           <NavLink to="/admin/messages">View Messages</NavLink>
           <LogoutButton onClick={handleLogout}>Log Out</LogoutButton>
         </RightAlignedContainer>
