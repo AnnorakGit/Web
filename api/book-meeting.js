@@ -13,45 +13,27 @@ export default async function handler(req, res) {
   }
 
   try {
-    // --- START DEBUGGING ---
-    // Let's send a debug email to see exactly what the server is receiving.
-    const debugData = {
-      message: "This is a debug email for the Annorak booking form.",
-      timestamp: new Date().toISOString(),
-      request: {
-        headers: req.headers,
-        body: req.body,
-        method: req.method,
-        url: req.url,
-      },
-    };
-
-    await resend.emails.send({
-      from: fromEmail,
-      to: [toEmail], // Send it to yourself
-      subject: 'Annorak Booking - DEBUG DATA',
-      html: `<pre>${JSON.stringify(debugData, null, 2)}</pre>`,
-    });
-    // --- END DEBUGGING ---
-
-
+    // Read the body ONCE and store its values in constants.
     const { name, email, dateTime } = req.body;
 
+    // Validate the received data.
     if (!name || !email || !dateTime) {
-      // Still return an error to the frontend if fields are missing
-      // The debug email will be sent regardless.
-      return res.status(400).json({ error: 'Missing required fields' });
+      console.error('Validation failed. Missing data.', { name, email, dateTime });
+      return res.status(400).json({ error: 'Missing required fields: name, email, or dateTime.' });
     }
 
-    const date = parseISO(dateTime);
+    // Format the date for human-readable output using date-fns
+    const date = parseISO(dateTime); // Safely parse the ISO string
     const formattedDateTime = format(date, "EEEE, MMMM d, yyyy 'at' h:mm a");
 
+    // Read HTML templates
     const newBookingTemplatePath = path.join(process.cwd(), 'out', 'NewBookingEmail.html');
     const confirmationTemplatePath = path.join(process.cwd(), 'out', 'BookingConfirmationEmail.html');
 
     const newBookingTemplate = await fs.readFile(newBookingTemplatePath, 'utf-8');
     const confirmationTemplate = await fs.readFile(confirmationTemplatePath, 'utf-8');
 
+    // Personalize templates with the constants
     const personalizedNewBookingEmail = newBookingTemplate
       .replace(/{{name}}/g, name)
       .replace(/{{email}}/g, email)
@@ -60,6 +42,8 @@ export default async function handler(req, res) {
     const personalizedConfirmationEmail = confirmationTemplate
       .replace(/{{name}}/g, name)
       .replace(/{{dateTime}}/g, formattedDateTime);
+
+    // --- Send Final Emails ---
 
     // Email to Annorak (Internal Notification)
     await resend.emails.send({
@@ -80,19 +64,11 @@ export default async function handler(req, res) {
     return res.status(200).json({ message: 'Emails sent successfully!' });
 
   } catch (error) {
-    // Also send an email if an error occurs
-    await resend.emails.send({
-        from: fromEmail,
-        to: [toEmail],
-        subject: 'Annorak Booking - ERROR',
-        html: `<p>An error occurred:</p><pre>${JSON.stringify({
-            errorMessage: error.message,
-            errorStack: error.stack,
-            requestBody: req.body,
-        }, null, 2)}</pre>`,
+    console.error('Error in /api/book-meeting:', {
+        errorMessage: error.message,
+        errorStack: error.stack,
+        requestBody: req.body, // This might be empty here, which is expected if the error is post-parsing
     });
-
-    console.error('Error sending email:', error);
-    return res.status(500).json({ error: 'Failed to send email' });
+    return res.status(500).json({ error: 'An internal error occurred.' });
   }
 } 
