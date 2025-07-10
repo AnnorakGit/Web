@@ -81,7 +81,7 @@ const Contact = () => {
           <div className={styles.info}>
             <h3>Contact Information</h3>
             <p>Email: contact@annorak.com</p>
-            <p>Phone: +1 (234) 567-890</p>
+            <p>Phone: +34 698 19 11 56</p>
           </div>
         </div>
         {responseMessage && (
