@@ -7,36 +7,50 @@ import styles from './FeaturedProjects.module.css';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 
-// Import .webm videos
+// Using the optimized .webm videos
 import saferHoldingVideo from '../assets/videos/SaferHoldingAnimatedLogo.webm';
 import businessArchVideo from '../assets/videos/BussinesArch.webm';
 import cascadeVideo from '../assets/videos/CascadeLogoAnimated.webm';
-import rentalAutomationVideo from '../assets/videos/7247869-hd_1920_1080_30fps.webm';
+import proposalsVideo from '../assets/videos/7247869-hd_1920_1080_30fps.webm';
+import dueDateDiligenceVideo from '../assets/videos/5716913-uhd_3840_2160_25fps.webm';
+import complianceVideo from '../assets/videos/2314024-uhd_3840_2160_24fps.webm';
 
 const projects = [
   {
-    title: 'Rental Management Automation',
-    description: 'A complete system to automate guest check-ins, communications, and manage cleaning schedules for vacation rentals.',
-    videoSrc: rentalAutomationVideo,
-    tags: ['React', 'Node.js', 'Automation', 'API'],
-  },
-  {
-    title: 'Industrial Process Control',
-    description: 'Real-time monitoring and control software for industrial machinery, reducing downtime and improving efficiency.',
-    videoSrc: businessArchVideo,
-    tags: ['Python', 'SCADA', 'IoT', 'Real-Time'],
-  },
-  {
-    title: 'Business Intelligence Dashboard',
-    description: 'A financial analytics dashboard providing key insights and data visualizations for strategic decision-making.',
+    title: 'Smart Rental Management, Powered by AI',
+    description: 'A fully automated platform that takes care of invoices, utility expenses, tenant communication, contract follow-ups, and reporting.',
     videoSrc: saferHoldingVideo,
-    tags: ['React', 'D3.js', 'Data-Viz', 'Finance'],
+    tags: ['AI', 'Automation', 'SaaS'],
   },
   {
-    title: 'E-commerce Recommendation Engine',
-    description: 'An AI-powered engine that personalizes product recommendations, increasing user engagement and sales.',
+    title: 'Smart Industrial Automation',
+    description: 'A unified SCADA + HMI platform that automates machine monitoring, PLC communication, 3D plant visualization, and production analytics.',
     videoSrc: cascadeVideo,
-    tags: ['AI/ML', 'Python', 'E-commerce', 'API'],
+    tags: ['SCADA', 'IoT', 'Industry 4.0'],
+  },
+  {
+    title: 'Automated Strategic Proposals',
+    description: 'Engineering automated workflows that generate complex business proposals, reducing delivery times from weeks to hours.',
+    videoSrc: proposalsVideo,
+    tags: ['Automation', 'BPA', 'Document AI'],
+  },
+  {
+    title: 'AI-Accelerated Due Diligence',
+    description: 'Implementing intelligent systems to analyze documents and data, streamlining the due diligence process with unparalleled accuracy.',
+    videoSrc: dueDateDiligenceVideo,
+    tags: ['AI/ML', 'NLP', 'Legal Tech'],
+  },
+  {
+    title: 'Automated Compliance & Operations',
+    description: 'Developing solutions for automated compliance verification and employee lifecycle management, ensuring efficiency and security.',
+    videoSrc: complianceVideo,
+    tags: ['Compliance', 'HR Tech', 'Automation'],
+  },
+  {
+    title: 'Core Digital Transformation',
+    description: 'Leading end-to-end digital transformation projects, modernizing legacy systems and unlocking new levels of productivity.',
+    videoSrc: businessArchVideo, // Renamed from transformationVideo to match import
+    tags: ['Digitalization', 'Legacy Systems', 'Consulting'],
   },
 ];
 
